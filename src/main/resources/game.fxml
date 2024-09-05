@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="questionPane" alignment="CENTER_LEFT" prefHeight="484.0" prefWidth="704.0" spacing="20" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loggame.GameController">
+
+
+    <Label fx:id="feedbackLabel" styleClass="feedback-label" text="" visible="false" />
+     <Label fx:id="questionLabel" styleClass="label" text="Question" />
+    <VBox alignment="CENTER_LEFT" prefHeight="225.0" prefWidth="664.0" spacing="20">
+
+        <GridPane alignment="CENTER_LEFT">
+            <Button fx:id="option1" onAction="#handleOption1" prefHeight="56.0" styleClass="jfx-button" text="Option 1" textFill="WHITE" GridPane.columnIndex="1" />
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+         </rowConstraints>
+        </GridPane>
+        <GridPane alignment="CENTER_LEFT">
+            <Button fx:id="option2" onAction="#handleOption2" styleClass="jfx-button" text="Option 2" />
+         <columnConstraints>
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+         </rowConstraints>
+        </GridPane>
+        <GridPane alignment="CENTER_LEFT">
+            <Button fx:id="option3" onAction="#handleOption3" styleClass="jfx-button" text="Option 3" />
+         <columnConstraints>
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+         </rowConstraints>
+        </GridPane>
+    </VBox>
+
+    <HBox alignment="BOTTOM_RIGHT" spacing="10">
+         <Label fx:id="timerLabel" styleClass="timer-label" text="Time left: 60s" />
+         <Button fx:id="finishButton" onAction="#handleFinish" styleClass="jfx-button" text="Finish" visible="false" />
+         <Button fx:id="nextButton" contentDisplay="TEXT_ONLY" onAction="#handleNext" prefWidth="184.0" styleClass="jfx-button" text="Next" />
+    </HBox>
+</VBox>

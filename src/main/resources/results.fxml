@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="resultsPane" alignment="CENTER" prefHeight="375.0" prefWidth="656.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="com.example.loggame.ResultsController">
+    <Label fx:id="resultLabel" styleClass="result-label" text="Results will be shown here" />
+</VBox>

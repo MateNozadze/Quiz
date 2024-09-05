@@ -1,0 +1,48 @@
+ #questionPane {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 20px;
+}
+
+
+.label {
+    -fx-font-size: 24px;
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+}
+
+
+.jfx-button {
+    -fx-background-color: linear-gradient(to bottom, #ff7e5f, #feb47b);
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 50px;
+    -fx-cursor: hand;
+    -fx-border-radius: 25px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);
+    -fx-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -fx-background-radius: 25px;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 2px;
+}
+
+.jfx-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #feb47b, #ff7e5f);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 10);
+}
+
+
+.timer-label {
+    -fx-font-size: 18px;
+    -fx-text-fill: #333333;
+}
+
+ #nextButton {
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+}
+
+
+#nextButton:hover {
+    -fx-background-color: #218838;
+}

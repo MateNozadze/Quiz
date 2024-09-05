@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" prefHeight="385.0" prefWidth="437.0" spacing="10" style="-fx-background-color: lightcyan;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loggame.LoginController">
+    <Label alignment="BOTTOM_CENTER" contentDisplay="CENTER" prefHeight="111.0" prefWidth="90.0" styleClass="login-label" text="Login" textAlignment="CENTER" textFill="#2b767efc">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+    <TextField fx:id="usernameField" cache="true" prefHeight="35.0" prefWidth="355.0" promptText="Username">
+        <font>
+            <Font name="Arial" size="12.0" />
+        </font>
+    </TextField>
+    <PasswordField fx:id="passwordField" prefHeight="34.0" prefWidth="310.0" promptText="Password" />
+    <Button onAction="#loginButtonAction" prefHeight="39.0" prefWidth="68.0" style="-fx-background-color: skyblue; -fx-background-radius: 32px; -fx-border-radius: 32px;" text="Login" textFill="#16292e">
+        <font>
+            <Font name="Wingdings 2" size="12.0" />
+        </font>
+    </Button>
+   <ButtonBar prefHeight="40.0" prefWidth="200.0" />
+</VBox>
