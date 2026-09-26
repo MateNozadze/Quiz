@@ -1,63 +1,74 @@
 package com.example.loggame;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.*;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 
 public class UserDao {
 
-    private Properties properties;
-    private static final Logger logger = Logger.getLogger(UserDao.class.getName());
+    private static final Logger logger = LogManager.getLogger(UserDao.class);
 
-    public UserDao() {
-        loadDatabaseProperties();
-    }
-
-    private void loadDatabaseProperties() {
-        properties = new Properties();
-        try (InputStream input = getClass().getResourceAsStream("/db.properties")) {
-            if (input == null) {
-                logger.severe("Sorry, unable to find db.properties");
-                return;
-            }
-            properties.load(input);
-            logger.info("Database properties loaded successfully.");
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, "Error loading database properties", ex);
-        }
+    public enum RegistrationResult {
+        SUCCESS,
+        USERNAME_TAKEN,
+        ERROR
     }
 
     public User authenticate(String username, String password) {
-        String url = properties.getProperty("db.url");
-        String dbUsername = properties.getProperty("db.username");
-        String dbPassword = properties.getProperty("db.password");
-
-        logger.info("Attempting to authenticate user: " + username);
-
-        String sql = "SELECT id, username, password FROM users WHERE username = ? AND password = ?";
-        try (Connection conn = DriverManager.getConnection(url, dbUsername, dbPassword);
+        String sql = "SELECT id, username, password_hash FROM users WHERE username = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
-            stmt.setString(2, password);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    int id = rs.getInt("id");
-                    String dbUser = rs.getString("username");
-                    String dbPass = rs.getString("password");
-                    logger.info("User authenticated successfully: " + username);
-                    return new User(id, dbUser, dbPass);
-                } else {
-                    logger.warning("Authentication failed for user: " + username);
-                    return null;
+                    String storedHash = rs.getString("password_hash");
+                    if (PasswordUtil.verify(password, storedHash)) {
+                        logger.info("User authenticated successfully: {}", username);
+                        return new User(rs.getInt("id"), rs.getString("username"));
+                    }
                 }
             }
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "Database error during authentication", ex);
+            logger.warn("Authentication failed for user: {}", username);
             return null;
+        } catch (SQLException | IOException ex) {
+            logger.error("Database error during authentication", ex);
+            return null;
+        }
+    }
+
+    public RegistrationResult register(String username, String password) {
+        String checkSql = "SELECT 1 FROM users WHERE username = ?";
+        String insertSql = "INSERT INTO users (username, password_hash) VALUES (?, ?)";
+
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+                checkStmt.setString(1, username);
+                try (ResultSet rs = checkStmt.executeQuery()) {
+                    if (rs.next()) {
+                        logger.warn("Registration rejected, username already taken: {}", username);
+                        return RegistrationResult.USERNAME_TAKEN;
+                    }
+                }
+            }
+
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                insertStmt.setString(1, username);
+                insertStmt.setString(2, PasswordUtil.hash(password));
+                insertStmt.executeUpdate();
+            }
+
+            logger.info("Registered new user: {}", username);
+            return RegistrationResult.SUCCESS;
+        } catch (SQLException | IOException ex) {
+            logger.error("Database error during registration", ex);
+            return RegistrationResult.ERROR;
         }
     }
 }

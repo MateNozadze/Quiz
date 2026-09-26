@@ -1,6 +1,7 @@
 package com.example.loggame;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,7 +47,6 @@ public class GameController {
     private boolean quizCompleted = false;
     private Timeline timer;
     private int timeLeft = 60;
-    private Object stage;
 
     @FXML
     public void initialize() {
@@ -95,19 +95,37 @@ public class GameController {
 
     @FXML
     void handleAnswer(String selectedAnswer) {
-        if (!quizCompleted) {
-            Question currentQuestion = questions.get(currentQuestionIndex);
-            String correctAnswer = currentQuestion.getCorrectAnswer();
-
-            if (selectedAnswer.equals(correctAnswer)) {
-                correctCount++;
-                logger.info("Correct answer selected.");
-            } else {
-                logger.info("Incorrect answer selected.");
-            }
-
-            handleNext();
+        if (quizCompleted) {
+            return;
         }
+        Question currentQuestion = questions.get(currentQuestionIndex);
+        String correctAnswer = currentQuestion.getCorrectAnswer();
+        setOptionsDisabled(true);
+
+        if (selectedAnswer.equals(correctAnswer)) {
+            correctCount++;
+            feedbackLabel.setText("Correct!");
+            feedbackLabel.setStyle("-fx-text-fill: green;");
+            logger.info("Correct answer selected.");
+        } else {
+            feedbackLabel.setText("Incorrect. Correct answer: " + correctAnswer);
+            feedbackLabel.setStyle("-fx-text-fill: red;");
+            logger.info("Incorrect answer selected.");
+        }
+        feedbackLabel.setVisible(true);
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(e -> {
+            setOptionsDisabled(false);
+            handleNext();
+        });
+        pause.play();
+    }
+
+    private void setOptionsDisabled(boolean disabled) {
+        option1.setDisable(disabled);
+        option2.setDisable(disabled);
+        option3.setDisable(disabled);
     }
 
     void startTimer() {
@@ -149,8 +167,9 @@ public class GameController {
         option1.setText("a) " + options.get(0));
         option2.setText("b) " + options.get(1));
         option3.setText("c) " + options.get(2));
+        setOptionsDisabled(false);
         hideFeedbackLabel();
-        logger.info("Displayed question: " + questionText);
+        logger.info("Displayed question: {}", questionText);
     }
 
     void showResults() {

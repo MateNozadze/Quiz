@@ -1,14 +1,13 @@
 package com.example.loggame;
 
-public class User {
-    private int id;
-    private String username;
-    private String password;
 
-    public User(int id, String username, String password) {
+public class User {
+    private final int id;
+    private final String username;
+
+    public User(int id, String username) {
         this.id = id;
         this.username = username;
-        this.password = password;
     }
 
     public int getId() {
@@ -17,9 +16,5 @@ public class User {
 
     public String getUsername() {
         return username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 }

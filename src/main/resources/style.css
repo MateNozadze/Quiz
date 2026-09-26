@@ -1,4 +1,4 @@
- #questionPane {
+#questionPane {
     -fx-background-color: #f0f0f0;
     -fx-padding: 20px;
 }
@@ -32,12 +32,17 @@
 }
 
 
+.feedback-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
 .timer-label {
     -fx-font-size: 18px;
     -fx-text-fill: #333333;
 }
 
- #nextButton {
+#nextButton {
     -fx-border-radius: 25px;
     -fx-background-radius: 25px;
 }

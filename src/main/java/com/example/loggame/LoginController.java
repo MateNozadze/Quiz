@@ -14,29 +14,35 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    private UserDao userDao;
-
-    public LoginController() {
-        this.userDao = new UserDao();
-    }
+    private final UserDao userDao = new UserDao();
 
     @FXML
     protected void loginButtonAction(ActionEvent event) {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        if (username == null || username.isBlank() || password == null || password.isBlank()) {
+            showAlert(Alert.AlertType.WARNING, "Missing information", "Please enter both a username and a password.");
+            return;
+        }
+
         User user = userDao.authenticate(username, password);
         if (user != null) {
-            showAlert("Login Successful", "Welcome " + user.getUsername());
-            Main.switchScene("/game.fxml");
             clearFields();
+            Main.switchScene("/game.fxml");
         } else {
-            showAlert("Login Failed", "Invalid username or password");
+            showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
         }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    @FXML
+    protected void goToRegisterAction(ActionEvent event) {
+        clearFields();
+        Main.switchScene("/register.fxml");
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
